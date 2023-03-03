@@ -26,7 +26,6 @@
  * ```
  */
 
-import "./index.css"
 import "./bootstrap-app"
 
 console.log(
