@@ -1,0 +1,8 @@
+import * as ReactDOM from "react-dom"
+import { App } from "./App"
+
+function render() {
+  ReactDOM.render(<App />, document.body)
+}
+
+render()
