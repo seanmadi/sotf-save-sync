@@ -1,8 +1,8 @@
 {
-  "name": "my-new-app",
-  "productName": "my-new-app",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "sotf-save-sync",
+  "productName": "sotf-save-sync",
+  "version": "0.1.0",
+  "description": "Sync your Sons of the Forest saves with your friends, so anyone can host",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
