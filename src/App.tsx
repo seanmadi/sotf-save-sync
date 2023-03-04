@@ -21,6 +21,9 @@ export const App = () => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [uploadSuccess, setUploadSuccess] = useState(null)
+  const [downloading, setDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState(null)
+  const [downloadSuccess, setDownloadSuccess] = useState(null)
 
   useEffect(() => {
     ipcRenderer.on(
@@ -38,6 +41,15 @@ export const App = () => {
         setUploadError(message)
       } else {
         setUploadSuccess(true)
+      }
+    })
+
+    ipcRenderer.on("downloadSaveComplete", (_event, message) => {
+      setDownloading(false)
+      if (message) {
+        setDownloadError(message)
+      } else {
+        setDownloadSuccess(true)
       }
     })
 
@@ -138,6 +150,38 @@ export const App = () => {
           {uploadSuccess && (
             <Label basic color="green" pointing>
               Successfully uploaded
+            </Label>
+          )}
+
+          <p style={{ margin: "1rem" }}>
+            Download save files to{" "}
+            <code style={{ wordWrap: "break-word" }}>{savePath}</code>
+          </p>
+          <Button
+            fluid
+            positive
+            loading={downloading}
+            onClick={() => {
+              setDownloadError(null)
+              setDownloading(true)
+              ipcRenderer.send(
+                "downloadSave",
+                githubToken,
+                githubGistId,
+                savePath
+              )
+            }}
+          >
+            Download save
+          </Button>
+          {downloadError && (
+            <Label basic color="red" pointing>
+              {downloadError}
+            </Label>
+          )}
+          {downloadSuccess && (
+            <Label basic color="green" pointing>
+              Successfully downloaded
             </Label>
           )}
         </Tab.Pane>
