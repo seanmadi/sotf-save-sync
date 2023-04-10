@@ -57,9 +57,8 @@ app.on("activate", () => {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-ipcMain.on("getLatestSavefile", (event, _args) => {
+// Receive messages from renderer side of things
+ipcMain.on("requestSystemValues", (event, _args) => {
   // First find user's steam id, so we can access the right directory
   // We assume only one user has ever played this game on this computer
   const savesDir = `C:\\Users\\${
@@ -76,7 +75,7 @@ ipcMain.on("getLatestSavefile", (event, _args) => {
     let latestDirectoryTime: Date | null = null
 
     if (!files) {
-      event.sender.send("setLatestSaveFile", {
+      event.sender.send("sendSystemValues", {
         steamId,
         latestDirectoryName: "",
         hostSavesDir,
@@ -95,7 +94,7 @@ ipcMain.on("getLatestSavefile", (event, _args) => {
         }
       } catch (error) {
         console.log(error)
-        event.sender.send("setLatestSaveFile", "")
+        event.sender.send("sendSystemValues", "")
       }
     })
     const result = {
@@ -103,7 +102,7 @@ ipcMain.on("getLatestSavefile", (event, _args) => {
       latestDirectoryName,
       hostSavesDir,
     }
-    event.sender.send("setLatestSaveFile", result)
+    event.sender.send("sendSystemValues", result)
   })
 })
 

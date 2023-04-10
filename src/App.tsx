@@ -34,7 +34,7 @@ export const App = () => {
   const [downloadSuccess, setDownloadSuccess] = useState(null)
 
   useEffect(() => {
-    ipcRenderer.on("setLatestSaveFile", (_event, systemValues) => {
+    ipcRenderer.on("sendSystemValues", (_event, systemValues) => {
       // Fill in defaults if they aren't already set (from a previous load/save)
       // It's gotta be whacky like this because we are getting the values from
       // a script that is on the (main) server side and we've got to subscribe
@@ -78,7 +78,7 @@ export const App = () => {
   // On first load, grab latest save file name, steamId, and host save directory
   // (note that the listener for this coming back is defined below)
   useEffect(() => {
-    ipcRenderer.send("getLatestSavefile")
+    ipcRenderer.send("requestSystemValues")
   }, [])
 
   const savePath = `${hostSavesDir}\\${latestSaveFile}`
