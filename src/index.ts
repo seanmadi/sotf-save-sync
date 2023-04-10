@@ -58,7 +58,7 @@ app.on("activate", () => {
 })
 
 // Receive messages from renderer side of things
-ipcMain.on("requestSystemValues", (event, _args) => {
+ipcMain.handle("requestSystemValues", async (event, _args) => {
   // First find user's steam id, so we can access the right directory
   // We assume only one user has ever played this game on this computer
   const savesDir = `C:\\Users\\${
@@ -70,50 +70,51 @@ ipcMain.on("requestSystemValues", (event, _args) => {
 
   // Loop through save directories and check the last updated dates for the files inside each one
   // We want to find out what the save directory is with the most recently written files
-  fs.readdir(hostSavesDir, (_error, files) => {
-    let latestDirectoryName: string | null = null
-    let latestDirectoryTime: Date | null = null
+  const files = await fs.promises.readdir(hostSavesDir)
 
-    if (!files) {
-      event.sender.send("sendSystemValues", {
-        steamId,
-        latestDirectoryName: "",
-        hostSavesDir,
-      })
-      return
-    }
+  let latestDirectoryName: string | null = null
+  let latestDirectoryTime: Date | null = null
 
-    files.map((f) => {
-      const filePath = `${hostSavesDir}\\${f}\\FurnitureStorageSaveData.json`
-      try {
-        const stats = fs.statSync(filePath)
-
-        if (latestDirectoryName == null || latestDirectoryTime < stats.mtime) {
-          latestDirectoryName = f
-          latestDirectoryTime = stats.mtime
-        }
-      } catch (error) {
-        console.log(error)
-        event.sender.send("sendSystemValues", "")
-      }
-    })
-    const result = {
+  if (!files) {
+    return {
       steamId,
-      latestDirectoryName,
+      latestDirectoryName: "",
       hostSavesDir,
     }
-    event.sender.send("sendSystemValues", result)
+  }
+
+  files.map((f) => {
+    const filePath = `${hostSavesDir}\\${f}\\FurnitureStorageSaveData.json`
+    try {
+      const stats = fs.statSync(filePath)
+
+      if (latestDirectoryName == null || latestDirectoryTime < stats.mtime) {
+        latestDirectoryName = f
+        latestDirectoryTime = stats.mtime
+      }
+    } catch (error) {
+      console.log(error)
+      return ""
+    }
   })
+  const result = {
+    steamId,
+    latestDirectoryName,
+    hostSavesDir,
+  }
+  return result
 })
 
-ipcMain.on("uploadSave", (event, githubToken, githubGistId, savePath) => {
-  uploadSave(savePath, githubToken, githubGistId, (message) => {
-    event.sender.send("uploadSaveComplete", message)
-  })
-})
+ipcMain.handle(
+  "uploadSave",
+  async (_event, githubToken, githubGistId, savePath) => {
+    return await uploadSave(savePath, githubToken, githubGistId)
+  }
+)
 
-ipcMain.on("downloadSave", (event, githubToken, githubGistId, savePath) => {
-  downloadSave(savePath, githubToken, githubGistId, (message) => {
-    event.sender.send("downloadSaveComplete", message)
-  })
-})
+ipcMain.handle(
+  "downloadSave",
+  async (_event, githubToken, githubGistId, savePath) => {
+    return await downloadSave(savePath, githubToken, githubGistId)
+  }
+)

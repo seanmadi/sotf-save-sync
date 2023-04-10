@@ -2,23 +2,9 @@ import React, { useEffect, useState } from "react"
 import "semantic-ui-css/semantic.min.css"
 import { Button, Form, Input, Label, Tab } from "semantic-ui-react"
 const { ipcRenderer } = window.require("electron")
+
 import "./App.css"
-
-// Hook to utilize localstorage
-const useSetting = (key: string, initialValue: string = "") => {
-  const [value, setValue] = useState(() => {
-    return localStorage.getItem(key) || initialValue
-  })
-
-  // Method returned that will set the value in state and localstorage
-  const setValueInBothPlaces = (val: string) => {
-    const valueToSet = val || ""
-    localStorage.setItem(key, valueToSet)
-    setValue(valueToSet)
-  }
-
-  return [value, setValueInBothPlaces] as [string, (val: string) => void]
-}
+import { useMainMutation, useSetting } from "./hooks"
 
 export const App = () => {
   const [githubToken, setGithubToken] = useSetting("github-token")
@@ -26,59 +12,44 @@ export const App = () => {
   const [latestSaveFile, setLatestSaveFile] = useSetting("latest-save")
   const [steamId, setSteamId] = useSetting("steam-id")
   const [hostSavesDir, setHostSavesDir] = useSetting("hosts-save-dir")
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState(null)
-  const [uploadSuccess, setUploadSuccess] = useState(null)
-  const [downloading, setDownloading] = useState(false)
-  const [downloadError, setDownloadError] = useState(null)
-  const [downloadSuccess, setDownloadSuccess] = useState(null)
-
-  useEffect(() => {
-    ipcRenderer.on("sendSystemValues", (_event, systemValues) => {
-      // Fill in defaults if they aren't already set (from a previous load/save)
-      // It's gotta be whacky like this because we are getting the values from
-      // a script that is on the (main) server side and we've got to subscribe
-      // and wait to asyncronously get that information
-      if (latestSaveFile == "") {
-        setLatestSaveFile(systemValues.latestDirectoryName)
-      }
-      if (steamId == "") {
-        setSteamId(systemValues.steamId)
-      }
-      if (hostSavesDir == "") {
-        setHostSavesDir(systemValues.hostSavesDir)
-      }
-    })
-
-    ipcRenderer.on("uploadSaveComplete", (_event, message) => {
-      setUploading(false)
-      if (message) {
-        setUploadError(message)
-      } else {
-        setUploadSuccess(true)
-      }
-    })
-
-    ipcRenderer.on("downloadSaveComplete", (_event, message) => {
-      setDownloading(false)
-      if (message) {
-        setDownloadError(message)
-      } else {
-        setDownloadSuccess(true)
-      }
-    })
-
-    // Clean the listener after the component is dismounted
-    // TODO: make this work, its erroring for me wanting an argument
-    // return () => {
-    //   ipcRenderer.removeAllListeners()
-    // }
-  }, [])
+  const {
+    isLoading: uploadIsLoading,
+    isSuccess: uploadIsSuccess,
+    error: uploadError,
+    mutate: uploadSave,
+  } = useMainMutation({
+    mutationFn: () =>
+      ipcRenderer.invoke("uploadSave", githubToken, githubGistId, savePath),
+  })
+  const {
+    isLoading: downloadIsLoading,
+    isSuccess: downloadIsSuccess,
+    error: downloadError,
+    mutate: downloadSave,
+  } = useMainMutation({
+    mutationFn: () =>
+      ipcRenderer.invoke("downloadSave", githubToken, githubGistId, savePath),
+  })
 
   // On first load, grab latest save file name, steamId, and host save directory
   // (note that the listener for this coming back is defined below)
   useEffect(() => {
-    ipcRenderer.send("requestSystemValues")
+    const requestSystemValues = async () => {
+      const result = await ipcRenderer.invoke("requestSystemValues")
+
+      // Fill in defaults if they aren't already set (from a previous load/save)
+      if (latestSaveFile == "") {
+        setLatestSaveFile(result.latestDirectoryName)
+      }
+      if (steamId == "") {
+        setSteamId(result.steamId)
+      }
+      if (hostSavesDir == "") {
+        setHostSavesDir(result.hostSavesDir)
+      }
+    }
+
+    requestSystemValues()
   }, [])
 
   const savePath = `${hostSavesDir}\\${latestSaveFile}`
@@ -141,21 +112,7 @@ export const App = () => {
             Upload save files located at{" "}
             <code style={{ wordWrap: "break-word" }}>{savePath}</code>
           </p>
-          <Button
-            fluid
-            positive
-            loading={uploading}
-            onClick={() => {
-              setUploadError(null)
-              setUploading(true)
-              ipcRenderer.send(
-                "uploadSave",
-                githubToken,
-                githubGistId,
-                savePath
-              )
-            }}
-          >
+          <Button fluid positive loading={uploadIsLoading} onClick={uploadSave}>
             Upload save
           </Button>
           {uploadError && (
@@ -163,7 +120,7 @@ export const App = () => {
               {uploadError}
             </Label>
           )}
-          {uploadSuccess && (
+          {uploadIsSuccess && (
             <Label basic color="green" pointing>
               Successfully uploaded
             </Label>
@@ -176,17 +133,8 @@ export const App = () => {
           <Button
             fluid
             positive
-            loading={downloading}
-            onClick={() => {
-              setDownloadError(null)
-              setDownloading(true)
-              ipcRenderer.send(
-                "downloadSave",
-                githubToken,
-                githubGistId,
-                savePath
-              )
-            }}
+            loading={downloadIsLoading}
+            onClick={downloadSave}
           >
             Download save
           </Button>
@@ -195,7 +143,7 @@ export const App = () => {
               {downloadError}
             </Label>
           )}
-          {downloadSuccess && (
+          {downloadIsSuccess && (
             <Label basic color="green" pointing>
               Successfully downloaded
             </Label>
