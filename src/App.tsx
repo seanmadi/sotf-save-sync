@@ -12,8 +12,9 @@ const useSetting = (key: string, initialValue: string = "") => {
 
   // Method returned that will set the value in state and localstorage
   const setValueInBothPlaces = (val: string) => {
-    localStorage.setItem(key, val)
-    setValue(val)
+    const valueToSet = val || ""
+    localStorage.setItem(key, valueToSet)
+    setValue(valueToSet)
   }
 
   return [value, setValueInBothPlaces] as [string, (val: string) => void]
@@ -33,14 +34,21 @@ export const App = () => {
   const [downloadSuccess, setDownloadSuccess] = useState(null)
 
   useEffect(() => {
-    ipcRenderer.on(
-      "setLatestSaveFile",
-      (_event, { steamId, latestDirectoryName, hostSavesDir }) => {
-        setLatestSaveFile(latestDirectoryName)
-        setSteamId(steamId)
-        setHostSavesDir(hostSavesDir)
+    ipcRenderer.on("setLatestSaveFile", (_event, systemValues) => {
+      // Fill in defaults if they aren't already set (from a previous load/save)
+      // It's gotta be whacky like this because we are getting the values from
+      // a script that is on the (main) server side and we've got to subscribe
+      // and wait to asyncronously get that information
+      if (latestSaveFile == "") {
+        setLatestSaveFile(systemValues.latestDirectoryName)
       }
-    )
+      if (steamId == "") {
+        setSteamId(systemValues.steamId)
+      }
+      if (hostSavesDir == "") {
+        setHostSavesDir(systemValues.hostSavesDir)
+      }
+    })
 
     ipcRenderer.on("uploadSaveComplete", (_event, message) => {
       setUploading(false)
@@ -67,7 +75,8 @@ export const App = () => {
     // }
   }, [])
 
-  // On first load, grab latest save file name
+  // On first load, grab latest save file name, steamId, and host save directory
+  // (note that the listener for this coming back is defined below)
   useEffect(() => {
     ipcRenderer.send("getLatestSavefile")
   }, [])
