@@ -12,12 +12,27 @@ import {
 const { ipcRenderer } = window.require("electron")
 import "./App.css"
 
+// Hook to utilize localstorage
+const useSetting = (key: string, initialValue: string = "") => {
+  const [value, setValue] = useState(() => {
+    return localStorage.getItem(key) || initialValue
+  })
+
+  // Method returned that will set the value in state and localstorage
+  const setValueInBothPlaces = (val: string) => {
+    localStorage.setItem(key, val)
+    setValue(val)
+  }
+
+  return [value, setValueInBothPlaces] as [string, (val: string) => void]
+}
+
 export const App = () => {
-  const [githubToken, setGithubToken] = useState("")
-  const [githubGistId, setGithubGistId] = useState("")
-  const [latestSaveFile, setLatestSaveFile] = useState("")
-  const [steamId, setSteamId] = useState("")
-  const [hostSavesDir, setHostSavesDir] = useState("")
+  const [githubToken, setGithubToken] = useSetting("github-token")
+  const [githubGistId, setGithubGistId] = useSetting("github-gist-id")
+  const [latestSaveFile, setLatestSaveFile] = useSetting("latest-save")
+  const [steamId, setSteamId] = useSetting("steam-id")
+  const [hostSavesDir, setHostSavesDir] = useSetting("hosts-save-dir")
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [uploadSuccess, setUploadSuccess] = useState(null)
