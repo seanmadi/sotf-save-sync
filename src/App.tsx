@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "semantic-ui-css/semantic.min.css"
-import {
-  Button,
-  Container,
-  Form,
-  Header,
-  Input,
-  Label,
-  Tab,
-} from "semantic-ui-react"
+import { Button, Form, Input, Label, Tab } from "semantic-ui-react"
 const { ipcRenderer } = window.require("electron")
 import "./App.css"
 
