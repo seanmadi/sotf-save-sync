@@ -10,6 +10,8 @@ This app has been tested up through Patch 3 of Sons of the Forest.
 
 Download the latest version: https://github.com/seanmadi/sotf-save-sync/releases/download/v1.0.0/sotf-save-sync-1.0.0.Setup.exe
 
+![Sync screen](https://user-images.githubusercontent.com/576752/231561480-603bfc80-27fa-4c13-9876-dc4d21706c2b.png "Sync screen")
+
 ***Note**: I didn't feel like going through the process of code signing the application, so Windows will pop up and warn you.*
 
 # Quick start
