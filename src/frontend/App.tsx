@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect } from "react"
 import "semantic-ui-css/semantic.min.css"
 import { Button, Form, Input, Label, Tab } from "semantic-ui-react"
 const { ipcRenderer } = window.require("electron")
@@ -19,7 +19,12 @@ export const App = () => {
     mutate: uploadSave,
   } = useMainMutation({
     mutationFn: () =>
-      ipcRenderer.invoke("uploadSave", githubToken, githubGistId, savePath),
+      ipcRenderer.invoke(
+        "uploadSave",
+        githubToken,
+        githubGistId,
+        latestSaveFile
+      ),
   })
   const {
     isLoading: downloadIsLoading,
@@ -28,7 +33,12 @@ export const App = () => {
     mutate: downloadSave,
   } = useMainMutation({
     mutationFn: () =>
-      ipcRenderer.invoke("downloadSave", githubToken, githubGistId, savePath),
+      ipcRenderer.invoke(
+        "downloadSave",
+        githubToken,
+        githubGistId,
+        latestSaveFile
+      ),
   })
 
   // On first load, grab latest save file name, steamId, and host save directory
