@@ -23,6 +23,7 @@ Download the latest version: https://github.com/seanmadi/sotf-save-sync/releases
 * Open `sotf-save-sync-1.0.0 Setup.exe`
 * Fill in your gist ID and token
 * Go to the Sync tab, and Upload or Download
+* Share your gist ID and token with friends in order to share your save!
 
 # Prerequisites for using the application
 
