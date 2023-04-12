@@ -11,7 +11,10 @@ export const playerFiles = [
 
 // Helper function to find the correct client save directory name that
 // corresponds to the game ID in the host save
-export const clientSaveDirNameFromHostSave = (hostSavePath, rootSavesDir) => {
+export const clientSaveDirNameFromHostSave = (
+  hostSavePath: string,
+  rootSavesDir: string
+) => {
   const clientRootPath = `${rootSavesDir}\\MultiplayerClient`
   // Get GameId from the host save that we just downloaded, so that we can
   // find the correct client save that matches the GameId

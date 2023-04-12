@@ -4,7 +4,11 @@ import fse from "fs-extra"
 import { systemValues } from "./system-values"
 import { clientSaveDirNameFromHostSave, playerFiles } from "./utility"
 
-export const uploadSave = async (saveDirName, githubToken, githubGistId) => {
+export const uploadSave = async (
+  saveDirName: string,
+  githubToken: string,
+  githubGistId: string
+) => {
   const systemVals = await systemValues()
   const hostSavePath = `${systemVals.hostSavesDir}\\${saveDirName}`
   const clientSavePath = `${systemVals.clientSavesDir}\\${saveDirName}`
