@@ -10,6 +10,16 @@ I have tested everything working great amongst my friends, but I am not responsi
 
 This app has been tested up through Patch 3 of Sons of the Forest.
 
+# Quick start
+
+* [Get a Github account](https://github.com/join)
+* [Create a Github gist](https://gist.github.com)
+* [Create a Github token with permission to read/write gists](https://github.com/settings/personal-access-tokens/new)
+* [Download the Sons of the Forest Save Sync app]()
+* Open `sotf-save-sync-0.1.0 Setup.exe`
+* Fill in your gist ID and token
+* Go to the Sync tab, and Upload or Download
+
 # Prerequisites for using the application
 
 The simplest way I could think of for sharing your save files was to use a Github gist. This is because the files are all text files, it's easy to make a Github account, and the API is really easy to use to updating a gist (compared to something like Google drive).
