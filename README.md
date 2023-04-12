@@ -8,13 +8,17 @@ I developed this application so that I could use it with friends, and I hope you
 
 This app has been tested up through Patch 3 of Sons of the Forest.
 
+Download the latest version: https://github.com/seanmadi/sotf-save-sync/releases/download/v1.0.0/sotf-save-sync-1.0.0.Setup.exe
+
+***Note**: I didn't feel like going through the process of code signing the application, so Windows will pop up and warn you.*
+
 # Quick start
 
 * [Get a Github account](https://github.com/join)
 * [Create a Github gist](https://gist.github.com)
 * [Create a Github token with permission to read/write gists](https://github.com/settings/personal-access-tokens/new)
-* [Download the Sons of the Forest Save Sync app]()
-* Open `sotf-save-sync-0.1.0 Setup.exe`
+* [Download the Sons of the Forest Save Sync app](https://github.com/seanmadi/sotf-save-sync/releases/download/v1.0.0/sotf-save-sync-1.0.0.Setup.exe)
+* Open `sotf-save-sync-1.0.0 Setup.exe`
 * Fill in your gist ID and token
 * Go to the Sync tab, and Upload or Download
 
@@ -55,7 +59,7 @@ Once you've done the steps above, you should have a **gist id** and a **github t
 
 ![Config screen](https://user-images.githubusercontent.com/576752/231561332-43bea013-2f6b-431e-be02-3237479907b6.png "Config screen")
 
-[Download the application]() and open the `sotf-save-sync-0.1.0 Setup.exe` file (which basically just opens the app).
+[Download the application](https://github.com/seanmadi/sotf-save-sync/releases/download/v1.0.0/sotf-save-sync-1.0.0.Setup.exe) and open the `sotf-save-sync-1.0.0 Setup.exe` file (which basically just opens the app).
 
 Fill in the **Github Token** and **Github Gist ID**.
 
