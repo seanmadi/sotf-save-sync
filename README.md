@@ -2,11 +2,9 @@
 
 Share your hosted Sons of the Forest save with your group of friends, so that anyone can be the host at any time with ease.
 
-I developed this application so that I could use it with friends, and I hope you can as well. I would suggest backing up your saves just in case anything does go wrong. They are located here:
+I developed this application so that I could use it with friends, and I hope you can as well. I would suggest backing up your saves before running the application, as I have done my best to test everything amongst my friends (which is working great), but there may be bugs I did not encounter or updates to the game. They are located here:
 
 `C:\Users\YOUR_NAME\AppData\LocalLow\Endnight\SonsOfTheForest\Saves\YOUR_STEAM_ID`
-
-I have tested everything working great amongst my friends, but I am not responsible for if there is anything I missed or if an update messes anything up in the future.
 
 This app has been tested up through Patch 3 of Sons of the Forest.
 
