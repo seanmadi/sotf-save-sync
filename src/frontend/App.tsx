@@ -69,10 +69,15 @@ export const App = () => {
       menuItem: "Config",
       render: () => (
         <Tab.Pane className="full-screen">
+          <p>
+            <a href="https://github.com/seanmadi/sotf-save-sync#readme">
+              Visit the application's README to find out how to obtain the
+              Github token and Github gist ID.
+            </a>
+          </p>
           <Form>
             <Form.Field>
               <label>Github Token</label>
-              <p>Instructions to come on how to obtain this.</p>
               <Input
                 placeholder="Github token"
                 value={githubToken}
@@ -81,7 +86,6 @@ export const App = () => {
             </Form.Field>
             <Form.Field>
               <label>Github Gist ID</label>
-              <p>Instructions to come on how to obtain this.</p>
               <Input
                 placeholder="Github gist ID"
                 value={githubGistId}
@@ -89,7 +93,7 @@ export const App = () => {
               />
             </Form.Field>
             <Form.Field>
-              <label>Steam Id</label>
+              <label>Steam ID</label>
               <p>
                 Automatically discovered if you are the only user on this
                 computer to play the game.

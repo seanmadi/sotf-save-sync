@@ -1,7 +1,7 @@
 {
   "name": "sotf-save-sync",
   "productName": "sotf-save-sync",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Sync your Sons of the Forest saves with your friends, so anyone can host",
   "main": ".webpack/main",
   "scripts": {
